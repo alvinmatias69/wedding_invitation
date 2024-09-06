@@ -1,0 +1,13 @@
+port = 8080
+static_web_dir = "./static"
+hidden_image_path = "/images/gallery-pic-8.jpg"
+steam_token_path = "/8Hbw1ZTxaGEDzRnQP3Fy/stt/20241012"
+username = "nyonge"
+password = "gaming"
+hidden_image_file_path = "./files/gallery-pic-8.jpg"
+fq_ifd_path = "IFD0"
+hidden_image_url_tag = "HostComputer"
+hidden_image_token_tag = "Artist"
+
+jwt_key = "caYKppbjabf2gaWNQFb!3:7%)%6!pY"
+jwt_expiry_minute = 15

@@ -39,7 +39,7 @@ func (r *Repository) GetByJwtToken(ctx context.Context, token string) (entities.
 }
 
 func (r *Repository) FindOneUnclaimed(ctx context.Context, trx pgx.Tx) (entities.Token, error) {
-	rows, err := trx.Query(ctx, "SELECT id, jwt_token, steam_token, claimed_at FROM tokens WHERE jwt_token = NULL;")
+	rows, err := trx.Query(ctx, "SELECT id, '' jwt_token, steam_token, NOW() claimed_at FROM tokens WHERE jwt_token IS NULL;")
 	if err != nil {
 		return entities.Token{}, err
 	}

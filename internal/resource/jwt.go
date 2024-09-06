@@ -38,7 +38,7 @@ func (j *JwtResource) ParseToken(ctx context.Context, token string) (entities.Jw
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("Error token parsing")
 		}
-		return j.cfg.JwtKey, nil
+		return []byte(j.cfg.JwtKey), nil
 	})
 	if err != nil {
 		return entities.JwtPayload{}, err

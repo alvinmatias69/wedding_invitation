@@ -3,6 +3,7 @@ module github.com/alvinmatias69/wedding_invitation
 go 1.23
 
 require (
+	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/dsoprea/go-exif/v3 v3.0.1 // indirect
 	github.com/dsoprea/go-iptc v0.0.0-20200609062250-162ae6b44feb // indirect
 	github.com/dsoprea/go-jpeg-image-structure/v2 v2.0.0-20221012074422-4f3f7e934102 // indirect

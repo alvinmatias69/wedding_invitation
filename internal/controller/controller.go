@@ -13,7 +13,7 @@ import (
 
 var (
 	steamTokenSuccessMsg  = "Congratulations, you've conquered the challenge. If it's before 12th of October 2024, I'd be delighted if you can come to my wedding!"
-	steamTokenUnavailable = "Congratulations, you've conquered the challenge. Unfortunately, all prizes already redeemed. Hit me up and say the secret word 'fufufafa kaskus legend'. If it's before 12th of October 2024, I'd be delighted if you can come to my wedding!"
+	steamTokenUnavailable = "Congratulations, you've conquered the challenge. Unfortunately, all prizes already redeemed. Hit me up and say the secret word 'fufufafa kaskus legend', our next meal will be on me. If it's before 12th of October 2024, I'd be delighted if you can come to my wedding!"
 )
 
 type Controller struct {
@@ -42,7 +42,7 @@ func (c *Controller) GetHiddenImage(ctx context.Context, w io.Writer) error {
 	}
 
 	lambda, err := c.exifResource.Embed(ctx, map[string]interface{}{
-		c.cfg.HiddenImageUrlTag:   c.cfg.HiddenImageUrlValue,
+		c.cfg.HiddenImageUrlTag:   c.cfg.SteamTokenPath,
 		c.cfg.HiddenImageTokenTag: token,
 	})
 	if err != nil {
@@ -70,7 +70,7 @@ func (c *Controller) GetSteamToken(ctx context.Context, token string) (entities.
 		return entities.SteamTokenResponse{}, err
 	}
 
-	if jwtPayload.IssuedAt.Add(time.Millisecond * time.Duration(c.cfg.JwtExpiryMs)).After(time.Now()) {
+	if jwtPayload.IssuedAt.Add(time.Minute * time.Duration(c.cfg.JwtExpiryMinute)).After(time.Now()) {
 		return entities.SteamTokenResponse{}, constant.ErrTokenExp
 	}
 

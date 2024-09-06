@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/alvinmatias69/wedding_invitation/internal/entities"
+	"github.com/jackc/pgx/v5"
 )
 
 type jwtResource interface {
@@ -18,12 +19,7 @@ type exifResource interface {
 
 type tokenRepository interface {
 	GetByJwtToken(context.Context, string) (entities.Token, error)
-	BeginTrx(context.Context) (trx, error)
-	FindOneUnclaimed(context.Context, trx) (entities.Token, error)
-	Claim(context.Context, trx, uint64, string) error
-}
-
-type trx interface {
-	Commit(context.Context) error
-	Rollback(context.Context) error
+	BeginTrx(context.Context) (pgx.Tx, error)
+	FindOneUnclaimed(context.Context, pgx.Tx) (entities.Token, error)
+	Claim(context.Context, pgx.Tx, uint64, string) error
 }

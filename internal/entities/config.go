@@ -1,19 +1,18 @@
 package entities
 
 type Config struct {
-	Port            string
-	StaticWebDir    string
-	HiddenImagePath string
-	FinalImagePath  string
-	Username        string
-	Password        string
+	Port            uint64 `toml:"port"`
+	StaticWebDir    string `toml:"static_web_dir"`
+	HiddenImagePath string `toml:"hidden_image_path"`
+	SteamTokenPath  string `toml:"steam_token_path"`
+	Username        string `toml:"username"`
+	Password        string `toml:"password"`
 
-	HiddenImageFilePath string
-	FqIfdPath           string
-	HiddenImageUrlTag   string
-	HiddenImageUrlValue string
-	HiddenImageTokenTag string
+	HiddenImageFilePath string `toml:"hidden_image_file_path"`
+	FqIfdPath           string `toml:"fq_ifd_path"`
+	HiddenImageUrlTag   string `toml:"hidden_image_url_tag"`
+	HiddenImageTokenTag string `toml:"hidden_image_token_tag"`
 
-	JwtKey      string
-	JwtExpiryMs uint64
+	JwtKey          string `toml:"jwt_key"`
+	JwtExpiryMinute uint64 `toml:"jwt_expiry_minute"`
 }
