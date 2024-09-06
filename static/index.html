@@ -309,13 +309,15 @@
     <script src="scripts/main.js?ver=1.1.0"></script>
     <script>
      window.onload = () => {
-       fetch("/ping", {
-         headers: {
-           Authorization: "Basic bnlvbmdlOmdhbWluZw=="
-         }
-       })
-       .then(res => console.log(res));
-     }
+       setInterval(() => {
+         fetch("/ping", {
+           headers: {
+             Authorization: "Basic bnlvbmdlOmdhbWluZw=="
+           }
+         })
+           .then(res => console.log(res));
+       }, 10000);
+    }
     </script>
   </body>
 </html>
