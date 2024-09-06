@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/alvinmatias69/wedding_invitation/internal/constant"
 	"github.com/alvinmatias69/wedding_invitation/internal/entities"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -31,7 +32,7 @@ func (r *Repository) GetByJwtToken(ctx context.Context, token string) (entities.
 
 	payload, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[entities.Token])
 	if errors.Is(err, pgx.ErrNoRows) {
-		return entities.Token{}, errors.New("not found")
+		return entities.Token{}, constant.ErrNotFound
 	}
 
 	return payload, err
@@ -45,7 +46,7 @@ func (r *Repository) FindOneUnclaimed(ctx context.Context, trx pgx.Tx) (entities
 
 	payload, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[entities.Token])
 	if errors.Is(err, pgx.ErrNoRows) {
-		return entities.Token{}, errors.New("not found")
+		return entities.Token{}, constant.ErrNotFound
 	}
 
 	return payload, err

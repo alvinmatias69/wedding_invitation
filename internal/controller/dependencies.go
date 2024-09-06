@@ -8,7 +8,7 @@ import (
 )
 
 type jwtResource interface {
-	GenerateToken(context.Context, map[string]interface{}) (string, error)
+	GenerateToken(context.Context, entities.JwtPayload) (string, error)
 	ParseToken(context.Context, string) (entities.JwtPayload, error)
 }
 

@@ -4,10 +4,12 @@ import (
 	"crypto/sha512"
 	"crypto/subtle"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strings"
 
+	"github.com/alvinmatias69/wedding_invitation/internal/constant"
 	"github.com/alvinmatias69/wedding_invitation/internal/entities"
 )
 
@@ -77,6 +79,12 @@ func (h *Handler) GetSteamToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res, err := h.controller.GetSteamToken(r.Context(), bearerTokens[1])
+	if errors.Is(err, constant.ErrTokenExp) {
+		log.Println("token expired")
+		handleResponse(w, nil, http.StatusUnauthorized, []byte("your token is already expired please generate a new one"))
+		return
+	}
+
 	if err != nil {
 		log.Printf("error while getting steam token: %v", err)
 		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))

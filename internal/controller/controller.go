@@ -6,8 +6,14 @@ import (
 	"io"
 	"time"
 
+	"github.com/alvinmatias69/wedding_invitation/internal/constant"
 	"github.com/alvinmatias69/wedding_invitation/internal/entities"
 	"github.com/google/uuid"
+)
+
+var (
+	steamTokenSuccessMsg  = "Congratulations, you've conquered the challenge. If it's before 12th of October 2024, I'd be delighted if you can come to my wedding!"
+	steamTokenUnavailable = "Congratulations, you've conquered the challenge. Unfortunately, all prizes already redeemed. Hit me up and say the secret word 'fufufafa kaskus legend'. If it's before 12th of October 2024, I'd be delighted if you can come to my wedding!"
 )
 
 type Controller struct {
@@ -27,9 +33,9 @@ func New(cfg entities.Config, jwtResource jwtResource, exifResource exifResource
 }
 
 func (c *Controller) GetHiddenImage(ctx context.Context, w io.Writer) error {
-	token, err := c.jwtResource.GenerateToken(ctx, map[string]interface{}{
-		"iat":      time.Now().Unix(),
-		"token_id": uuid.NewString(),
+	token, err := c.jwtResource.GenerateToken(ctx, entities.JwtPayload{
+		IssuedAt: time.Now(),
+		TokenId:  uuid.NewString(),
 	})
 	if err != nil {
 		return err
@@ -56,16 +62,16 @@ func (c *Controller) GetSteamToken(ctx context.Context, token string) (entities.
 	if err == nil {
 		return entities.SteamTokenResponse{
 			TokenId: tokenData.SteamToken,
-			Message: "lorem ipsum",
+			Message: steamTokenSuccessMsg,
 		}, nil
 	}
 
-	if err != nil && !errors.Is(err, errors.New("not found")) {
+	if err != nil && !errors.Is(err, constant.ErrNotFound) {
 		return entities.SteamTokenResponse{}, err
 	}
 
 	if jwtPayload.IssuedAt.Add(time.Millisecond * time.Duration(c.cfg.JwtExpiryMs)).After(time.Now()) {
-		return entities.SteamTokenResponse{}, errors.New("token expired")
+		return entities.SteamTokenResponse{}, constant.ErrTokenExp
 	}
 
 	trx, err := c.tokenRepository.BeginTrx(ctx)
@@ -76,9 +82,9 @@ func (c *Controller) GetSteamToken(ctx context.Context, token string) (entities.
 	defer trx.Rollback(ctx)
 
 	tokenData, err = c.tokenRepository.FindOneUnclaimed(ctx, trx)
-	if errors.Is(err, errors.New("not found")) {
+	if errors.Is(err, constant.ErrNotFound) {
 		return entities.SteamTokenResponse{
-			Message: "lorem ipsum too late",
+			Message: steamTokenUnavailable,
 		}, nil
 	}
 
@@ -95,6 +101,6 @@ func (c *Controller) GetSteamToken(ctx context.Context, token string) (entities.
 
 	return entities.SteamTokenResponse{
 		TokenId: tokenData.SteamToken,
-		Message: "lorem ipsum",
+		Message: steamTokenSuccessMsg,
 	}, nil
 }

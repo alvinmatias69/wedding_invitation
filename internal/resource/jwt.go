@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 
+	"github.com/alvinmatias69/wedding_invitation/internal/constant"
 	"github.com/alvinmatias69/wedding_invitation/internal/entities"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 var (
 	defaultSigningMethod = jwt.SigningMethodHS512
+	tokenIdKey           = "token_id"
 )
 
 type JwtResource struct {
@@ -25,7 +27,7 @@ func NewJwtResource(cfg entities.Config) *JwtResource {
 func (j *JwtResource) GenerateToken(ctx context.Context, payload entities.JwtPayload) (string, error) {
 	token := jwt.NewWithClaims(defaultSigningMethod, jwt.MapClaims{
 		"iat":      payload.IssuedAt.Unix(),
-		"token_id": payload.TokenId,
+		tokenIdKey: payload.TokenId,
 	})
 
 	return token.SignedString([]byte(j.cfg.JwtKey))
@@ -56,9 +58,9 @@ func (j *JwtResource) ParseToken(ctx context.Context, token string) (entities.Jw
 		return entities.JwtPayload{}, errors.New("Error claims")
 	}
 
-	tokenId, ok := claims["token_id"]
+	tokenId, ok := claims[tokenIdKey]
 	if !ok {
-		return entities.JwtPayload{}, errors.New("token id not found")
+		return entities.JwtPayload{}, constant.ErrNotFound
 	}
 
 	return entities.JwtPayload{
