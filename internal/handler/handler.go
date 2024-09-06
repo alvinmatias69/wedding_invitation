@@ -3,6 +3,7 @@ package handler
 import (
 	"crypto/sha512"
 	"crypto/subtle"
+	"encoding/json"
 	"log"
 	"net/http"
 	"strings"
@@ -43,38 +44,51 @@ func (h *Handler) GetHiddenImage(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if !usernameMatch || !passwordMatch {
-		// TODO: move this to reusable function
-		w.Header().Add("wWW-authenticate", "Basic")
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("almost there"))
+		handleResponse(w,
+			map[string]string{"wWW-authenticate": "Basic"},
+			http.StatusUnauthorized,
+			[]byte("try ping"))
 		return
 	}
 
 	if err := h.controller.GetHiddenImage(r.Context(), w); err != nil {
 		log.Printf("error while getting hidden image: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("please contact site administrator"))
+		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
 	}
 }
 
-func (h *Handler) GetFinalImage(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetSteamToken(w http.ResponseWriter, r *http.Request) {
 	bearerToken := r.Header.Get("Authorization")
 	if len(bearerToken) == 0 {
-		// TODO: move this to reusable function
-		w.Header().Add("wWW-authenticate", "Bearer")
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("almost there"))
+		handleResponse(w,
+			map[string]string{"wWW-authenticate": "Bearer"},
+			http.StatusUnauthorized,
+			[]byte("Please take a look more thoroughly"))
 		return
 	}
 
 	bearerTokens := strings.Split(bearerToken, " ")
 	if len(bearerTokens) < 2 {
-		// TODO: move this to reusable function
-		w.Header().Add("wWW-authenticate", "Bearer")
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("almost there"))
+		handleResponse(w,
+			map[string]string{"wWW-authenticate": "Bearer"},
+			http.StatusUnauthorized,
+			[]byte("Please take a look more thoroughly"))
 		return
 	}
 
-	token := bearerTokens[1]
+	res, err := h.controller.GetSteamToken(r.Context(), bearerTokens[1])
+	if err != nil {
+		log.Printf("error while getting steam token: %v", err)
+		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
+		return
+	}
+
+	jsonRes, err := json.Marshal(res)
+	if err != nil {
+		log.Printf("error while parsing response: %v", err)
+		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
+		return
+	}
+
+	handleResponse(w, map[string]string{"Content-Type": "application/json"}, http.StatusOK, jsonRes)
 }

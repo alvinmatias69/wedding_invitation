@@ -1,4 +1,4 @@
-package service
+package resource
 
 import (
 	"context"
@@ -9,47 +9,44 @@ import (
 	jpegstructure "github.com/dsoprea/go-jpeg-image-structure/v2"
 )
 
-type ExifService struct {
+type ExifResource struct {
 	cfg entities.Config
 }
 
-func NewExifService(cfg entities.Config) *ExifService {
-	return &ExifService{
+func NewExifResource(cfg entities.Config) *ExifResource {
+	return &ExifResource{
 		cfg: cfg,
 	}
 }
 
-func (e *ExifService) EmbedAndWrite(ctx context.Context, token string, w io.Writer) error {
+func (e *ExifResource) Embed(ctx context.Context, payload map[string]interface{}) (func(io.Writer) error, error) {
 	mediaCtx, err := jpegstructure.NewJpegMediaParser().ParseFile(e.cfg.HiddenImageFilePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	segmentList := mediaCtx.(*jpegstructure.SegmentList)
 	builder, err := segmentList.ConstructExifBuilder()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	ifd0Ib, err := exif.GetOrCreateIbFromRootIb(builder, e.cfg.FqIfdPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = ifd0Ib.SetStandardWithName(e.cfg.HiddenImageUrlTag, e.cfg.HiddenImageUrlValue)
-	if err != nil {
-		return err
-	}
-
-	err = ifd0Ib.SetStandardWithName(e.cfg.HiddenImageTokenTag, token)
-	if err != nil {
-		return err
+	for key, val := range payload {
+		err = ifd0Ib.SetStandardWithName(key, val)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	err = segmentList.SetExif(builder)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return segmentList.Write(w)
+	return segmentList.Write, nil
 }

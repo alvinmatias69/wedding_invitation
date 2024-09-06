@@ -29,7 +29,7 @@ func (s *Server) Start(cfg entities.Config) {
 	})
 
 	http.HandleFunc(fmt.Sprintf("GET %s", cfg.HiddenImagePath), s.handler.GetHiddenImage)
-	http.HandleFunc(fmt.Sprintf("GET %s", cfg.FinalImagePath), s.handler.GetFinalImage)
+	http.HandleFunc(fmt.Sprintf("GET %s", cfg.FinalImagePath), s.handler.GetSteamToken)
 
 	fmt.Printf("starting server in port: %v\n", cfg.Port)
 	err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Port), nil)
