@@ -1,10 +1,17 @@
+const HIDE_CHURCH_PARAMS = "hc";
+const CHURCH_ID = "church-events";
 // Add your javascript here
 // Don't forget to add it into respective layouts where this js file is needed
 $(document).ready(function() {
   AOS.init({
     // uncomment below for on-scroll animations to played only once
-    // once: true
+    once: true
   }); // initialize animate on scroll library
+
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has(HIDE_CHURCH_PARAMS) && urlParams.get(HIDE_CHURCH_PARAMS) === "y") {
+    document.getElementById(CHURCH_ID).remove();
+  }
 });
 
 // Smooth scroll for links with hashes
