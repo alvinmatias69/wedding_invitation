@@ -1,8 +1,11 @@
 const HIDE_CHURCH_PARAMS = "hc";
 const CHURCH_ID = "church-events";
+
 // Add your javascript here
 // Don't forget to add it into respective layouts where this js file is needed
 $(document).ready(function() {
+  $('#liveToast').toast({});
+
   AOS.init({
     // uncomment below for on-scroll animations to played only once
     once: true
@@ -12,6 +15,9 @@ $(document).ready(function() {
   if (urlParams.has(HIDE_CHURCH_PARAMS) && urlParams.get(HIDE_CHURCH_PARAMS) === "y") {
     document.getElementById(CHURCH_ID).remove();
   }
+
+  document.getElementById("donation-bca").addEventListener("click", () => handle_donation("7751045852"));
+  document.getElementById("donation-ocbc").addEventListener("click", () => handle_donation("015810061463"));
 });
 
 // Smooth scroll for links with hashes
@@ -101,3 +107,19 @@ $(document).on("click", '[data-toggle="lightbox"]', function(event) {
   event.preventDefault();
   $(this).ekkoLightbox();
 });
+
+function handle_donation(payload) {
+  const textArea = document.createElement('textarea');
+  textArea.value = payload;
+  textArea.style.opacity = 0;
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    $('#liveToast').toast('show');
+  } catch (err) {
+    console.error(err.name, err.message);
+  } finally {
+    document.body.removeChild(textArea);
+  }
+}
