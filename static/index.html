@@ -264,9 +264,9 @@
         <div class="ww-section ww-rsvp-detail text-white" id="rsvp">
           <div class="container" data-aos="zoom-in-up" data-aos-duration="1000">
             <div class="col text-center">
-              <h2 class="h1 ww-title pb-3" data-aos="zoom-in-down" data-aos-duration="1000">Join Our Party</h2>
+              <h2 class="h1 ww-title pb-3" data-aos="zoom-in-down" data-aos-duration="1000">Send Us a Message</h2>
             </div>
-            <div class="row ww-rsvp-form">
+            <div class="row ww-rsvp-form mb-5">
               <div class="col-md-10">
                 <div class="card-body">
                   <form action="https://formspree.io/example@email.com" method="POST">
@@ -277,41 +277,12 @@
                           <input class="form-control" id="name-input" type="text" name="name" required="required"/>
                         </div>
                       </div>
-                      <div class="col-md-6 pb-3">
-                        <div class="form-group">
-                          <label for="email-input">Your Email*</label>
-                          <input class="form-control" id="email-input" type="email" name="_replyto" required="required"/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col md-6 pb-3">
-                        <div class="form-group">
-                          <label for="guest-input">Number of Guests</label>
-                          <select class="form-control" id="guest-input" name="guest">
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                            <option value="4">Four</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-md-6 pb-3">
-                        <div class="form-group">
-                          <label for="events-input">I am Attending</label>
-                          <select class="form-control" id="events-input" name="events">
-                            <option value="all-event">All Events</option>
-                            <option value="wedding-ceremony">Wedding ceremony</option>
-                            <option value="reception-party">Reception Party</option>
-                          </select>
-                        </div>
-                      </div>
                     </div>
                     <div class="row">
                       <div class="col">
                         <div class="form-group">
-                          <label for="message-input">Your Message</label>
-                          <textarea class="form-control" id="message-input" name="message" rows="4"></textarea>
+                          <label for="message-input">Your Message*</label>
+                          <textarea class="form-control" id="message-input" name="message" rows="4" required="required"></textarea>
                         </div>
                       </div>
                     </div>
@@ -324,14 +295,28 @@
                 </div>
               </div>
             </div>
+            <div class="row ww-rsvp-form text-dark">
+              <div class="col-md-10">
+                <div class="card-body justify-content-center">
+                  <div class="card mb-3" style="width: 100%; max-width: 80vw">
+                    <div class="card-body">
+                      <h5 class="card-title">Sender</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">2024-09-09 15.30</h6>
+                      <p class="card-text">Message</p>
+                    </div>
+                  </div>
+                  <div class="card mb-3" style="width: 100%; max-width: 80vw">
+                    <div class="card-body">
+                      <h5 class="card-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus posuere suscipit libero, ut suscipit neque tincidunt non. Sed ipsum urna, vehicula eu risus eu, euismod posuere metus. Duis eu dui quis lectus ultrices iaculis. Maecenas ultrices massa et euismod sollicitudin. Donec tincidunt ut ante at malesuada. Vivamus sit amet massa at felis pellentesque venenatis. Mauris malesuada, leo sit amet luctus pretium, lorem urna pharetra velit, ac eleifend augue elit in ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin blandit urna a tempus pellentesque. Fusce in diam eu magna posuere vestibulum. Curabitur ut odio volutpat, egestas arcu ac, finibus magna.</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">2024-09-09 15.30</h6>
+                      <p class="card-text">Message</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="ww-footer bg-light">
-          <div class="container text-center py-4">
-            <p class="my-0">&copy; Davina & Matias Wedding. All rights reserved.</p>
-            <p class="mb-0">Design - <a class="credit" href="https://templateflip.com" target="_blank">TemplateFlip</a></p>
-          </div>
-        </div></div>
     </div>
     <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
       <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
