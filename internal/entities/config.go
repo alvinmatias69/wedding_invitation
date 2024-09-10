@@ -15,4 +15,6 @@ type Config struct {
 
 	JwtKey          string `toml:"jwt_key"`
 	JwtExpiryMinute uint64 `toml:"jwt_expiry_minute"`
+
+	MessageLimit uint64 `toml:"message_limit"`
 }

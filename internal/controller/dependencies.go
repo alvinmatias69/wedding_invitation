@@ -23,3 +23,8 @@ type tokenRepository interface {
 	FindOneUnclaimed(context.Context, pgx.Tx) (entities.Token, error)
 	Claim(context.Context, pgx.Tx, uint64, string) error
 }
+
+type messageRepository interface {
+	Insert(context.Context, entities.Message) error
+	Get(context.Context, uint64, uint64) ([]entities.Message, error)
+}

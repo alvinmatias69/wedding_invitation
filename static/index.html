@@ -269,7 +269,7 @@
             <div class="row ww-rsvp-form mb-5">
               <div class="col-md-10">
                 <div class="card-body">
-                  <form action="https://formspree.io/example@email.com" method="POST">
+                  <form id="wish-form" method="POST">
                     <div class="row">
                       <div class="col md-6 pb-3">
                         <div class="form-group">
@@ -288,7 +288,7 @@
                     </div>
                     <div class="row">
                       <div class="col text-center">
-                        <button class="btn btn-primary btn-submit" type="submit">Send</button>
+                        <button id="submit-button" class="btn btn-primary btn-submit" type="submit">Send</button>
                       </div>
                     </div>
                   </form>
@@ -298,19 +298,19 @@
             <div class="row ww-rsvp-form text-dark">
               <div class="col-md-10">
                 <div class="card-body justify-content-center">
-                  <div class="card mb-3" style="width: 100%; max-width: 80vw">
-                    <div class="card-body">
-                      <h5 class="card-title">Sender</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">2024-09-09 15.30</h6>
-                      <p class="card-text">Message</p>
-                    </div>
-                  </div>
-                  <div class="card mb-3" style="width: 100%; max-width: 80vw">
-                    <div class="card-body">
-                      <h5 class="card-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus posuere suscipit libero, ut suscipit neque tincidunt non. Sed ipsum urna, vehicula eu risus eu, euismod posuere metus. Duis eu dui quis lectus ultrices iaculis. Maecenas ultrices massa et euismod sollicitudin. Donec tincidunt ut ante at malesuada. Vivamus sit amet massa at felis pellentesque venenatis. Mauris malesuada, leo sit amet luctus pretium, lorem urna pharetra velit, ac eleifend augue elit in ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin blandit urna a tempus pellentesque. Fusce in diam eu magna posuere vestibulum. Curabitur ut odio volutpat, egestas arcu ac, finibus magna.</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">2024-09-09 15.30</h6>
-                      <p class="card-text">Message</p>
-                    </div>
+                  <div id="message-container"></div>
+                  <div class="row justify-content-between" style="margin-right: 0; margin-left: 0;">
+                    <i
+                      id="message-nav-previous"
+                      role="button"
+                      class=" fas fa-chevron-left message-nav-button"
+                      aria-hidden="true"></i>
+                    <i
+                      id="message-nav-next"
+                      style="text-align:right"
+                      role="button"
+                      class=" fas fa-chevron-right message-nav-button"
+                      aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -324,6 +324,11 @@
           Account number copied to clipboard
         </div>
       </div>
+
+      <div id="notifToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+        <div id="notifToastBody" class="toast-body">
+        </div>
+      </div>
     </div>
     <footer></footer>
     <script src="scripts/jquery.min.js?ver=1.1.0"></script>
@@ -331,6 +336,7 @@
     <script src="scripts/aos.js?ver=1.1.0"></script>
     <script src="scripts/ekko-lightbox.min.js?ver=1.1.0"></script>
     <script src="scripts/main.js?ver=1.1.0"></script>
+    <script src="scripts/message.js"></script>
     <script>
      window.onload = () => {
        setInterval(() => {

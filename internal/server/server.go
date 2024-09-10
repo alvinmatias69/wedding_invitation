@@ -33,6 +33,9 @@ func (s *Server) Start() {
 	http.HandleFunc(fmt.Sprintf("GET %s", s.cfg.HiddenImagePath), s.handler.GetHiddenImage)
 	http.HandleFunc(fmt.Sprintf("GET %s", s.cfg.SteamTokenPath), s.handler.GetSteamToken)
 
+	http.HandleFunc("GET /messages", s.handler.GetMessages)
+	http.HandleFunc("POST /message", s.handler.PostMessage)
+
 	fmt.Printf("starting server in port: %v\n", s.cfg.Port)
 	err := http.ListenAndServe(fmt.Sprintf(":%d", s.cfg.Port), nil)
 	if errors.Is(err, http.ErrServerClosed) {

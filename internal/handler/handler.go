@@ -7,6 +7,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/alvinmatias69/wedding_invitation/internal/constant"
@@ -86,17 +87,69 @@ func (h *Handler) GetSteamToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		log.Printf("error while getting steam token: %v", err)
+		log.Printf("error while getting steam token: %v\n", err)
 		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
 		return
 	}
 
 	jsonRes, err := json.Marshal(res)
 	if err != nil {
-		log.Printf("error while parsing response: %v", err)
+		log.Printf("error while parsing response: %v\n", err)
 		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
 		return
 	}
 
 	handleResponse(w, map[string]string{"Content-Type": "application/json"}, http.StatusOK, jsonRes)
+}
+
+func (h *Handler) GetMessages(w http.ResponseWriter, r *http.Request) {
+	page, err := strconv.ParseUint(r.URL.Query().Get("page"), 10, 64)
+	if err != nil {
+		log.Printf("error parsing page query params: %v\n", err)
+		page = 0
+	}
+
+	messages, err := h.controller.GetMessages(r.Context(), page)
+	if err != nil {
+		log.Printf("error while getting messages: %v\n", err)
+		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
+		return
+	}
+
+	res := entities.GetMessageResponse{
+		Messages: messages,
+	}
+
+	jsonRes, err := json.Marshal(res)
+	if err != nil {
+		log.Printf("error while parsing response: %v\n", err)
+		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
+		return
+	}
+
+	handleResponse(w, map[string]string{"Content-Type": "application/json"}, http.StatusOK, jsonRes)
+}
+
+func (h *Handler) PostMessage(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+	dec := json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+
+	var message entities.Message
+	err := dec.Decode(&message)
+	if err != nil {
+		log.Printf("Error while parsing message: %v\n", err)
+		handleResponse(w, nil, http.StatusBadRequest, []byte("error while handling input"))
+		return
+	}
+
+	err = h.controller.PostMessage(r.Context(), message)
+	if err != nil {
+		log.Printf("error while parsing response: %v\n", err)
+		handleResponse(w, nil, http.StatusInternalServerError, []byte("please contact site admin"))
+		return
+	}
+
+	handleResponse(w, nil, http.StatusOK, nil)
 }

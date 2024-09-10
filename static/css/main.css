@@ -199,3 +199,13 @@ iframe {
   height: 50vh;
   width: auto;
 }
+
+.message-card {
+  width: 100%;
+  max-width: 80vw;
+}
+
+.message-nav-button {
+  font-size: xx-large;
+  color: white;
+}

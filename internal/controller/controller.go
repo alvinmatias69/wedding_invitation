@@ -17,18 +17,20 @@ var (
 )
 
 type Controller struct {
-	cfg             entities.Config
-	jwtResource     jwtResource
-	exifResource    exifResource
-	tokenRepository tokenRepository
+	cfg               entities.Config
+	jwtResource       jwtResource
+	exifResource      exifResource
+	tokenRepository   tokenRepository
+	messageRepository messageRepository
 }
 
-func New(cfg entities.Config, jwtResource jwtResource, exifResource exifResource, tokenRepository tokenRepository) *Controller {
+func New(cfg entities.Config, jwtResource jwtResource, exifResource exifResource, tokenRepository tokenRepository, messageRepository messageRepository) *Controller {
 	return &Controller{
-		cfg:             cfg,
-		jwtResource:     jwtResource,
-		exifResource:    exifResource,
-		tokenRepository: tokenRepository,
+		cfg:               cfg,
+		jwtResource:       jwtResource,
+		exifResource:      exifResource,
+		tokenRepository:   tokenRepository,
+		messageRepository: messageRepository,
 	}
 }
 
@@ -103,4 +105,18 @@ func (c *Controller) GetSteamToken(ctx context.Context, token string) (entities.
 		TokenId: tokenData.SteamToken,
 		Message: steamTokenSuccessMsg,
 	}, nil
+}
+
+func (c *Controller) GetMessages(ctx context.Context, page uint64) ([]entities.Message, error) {
+	var offset = page * c.cfg.MessageLimit
+	messages, err := c.messageRepository.Get(ctx, c.cfg.MessageLimit, offset)
+	if errors.Is(err, constant.ErrNotFound) {
+		return make([]entities.Message, 0), nil
+	}
+
+	return messages, err
+}
+
+func (c *Controller) PostMessage(ctx context.Context, msg entities.Message) error {
+	return c.messageRepository.Insert(ctx, msg)
 }

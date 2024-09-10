@@ -11,3 +11,5 @@ hidden_image_token_tag = "Artist"
 
 jwt_key = "caYKppbjabf2gaWNQFb!3:7%)%6!pY"
 jwt_expiry_minute = 15
+
+message_limit = 5
