@@ -72,7 +72,7 @@ func (c *Controller) GetSteamToken(ctx context.Context, token string) (entities.
 		return entities.SteamTokenResponse{}, err
 	}
 
-	if jwtPayload.IssuedAt.Add(time.Minute * time.Duration(c.cfg.JwtExpiryMinute)).After(time.Now()) {
+	if jwtPayload.IssuedAt.Add(time.Minute * time.Duration(c.cfg.JwtExpiryMinute)).Before(time.Now()) {
 		return entities.SteamTokenResponse{}, constant.ErrTokenExp
 	}
 
