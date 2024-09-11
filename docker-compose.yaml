@@ -1,7 +1,6 @@
 services:
   web:
-    build:
-      context: .
+    image: ghcr.io/alvinmatias69/winv:0.1.1
     container_name: web
     ports:
       - ${PORT}:${PORT}
