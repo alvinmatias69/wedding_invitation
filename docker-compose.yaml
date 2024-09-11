@@ -1,18 +1,14 @@
-version: '3.9'
-
 services:
-  # web:
-  #   build:
-  #     context: .
-  #   container_name: web
-  #   ports:
-  #     - ${PORT}:${PORT}
-  #   environment:
-  #     PORT: ${PORT}
-  #     DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  web:
+    build:
+      context: .
+    container_name: web
+    ports:
+      - ${PORT}:${PORT}
+    env_file: ".env"
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: postgres:16
     restart: always
