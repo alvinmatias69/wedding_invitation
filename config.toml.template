@@ -1,0 +1,15 @@
+port = 8080
+static_web_dir = "./static"
+hidden_image_path = ""
+steam_token_path = ""
+username = ""
+password = ""
+hidden_image_file_path = ""
+fq_ifd_path = ""
+hidden_image_url_tag = ""
+hidden_image_token_tag = ""
+
+jwt_key = ""
+jwt_expiry_minute = 15
+
+message_limit = 5

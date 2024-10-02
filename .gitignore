@@ -27,3 +27,5 @@ go.work.sum
 .docker/db
 
 winv
+
+config.toml
